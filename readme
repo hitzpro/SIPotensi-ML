@@ -1,0 +1,77 @@
+# Dokumentasi Implementasi Algoritma K-Means Clustering
+
+## 1. Alur Proses Data (Pipeline)
+Sistem prediksi potensi siswa ini bekerja dengan tahapan sebagai berikut:
+
+1.  **Input Data**: Data nilai siswa (Rata-rata Tugas, UTS, UAS).
+2.  **Preprocessing (StandardScaler)**: 
+    -   Mengubah skala data agar memiliki rentang yang setara (Mean=0, Std=1).
+    -   *Tujuan*: Agar fitur dengan nilai besar (misal 100) tidak mendominasi perhitungan jarak dibanding fitur lain.
+3.  **Clustering (K-Means)**:
+    -   Algoritma mengelompokkan data ke dalam `K=3` cluster.
+    -   Iterasi dilakukan hingga centroid stabil (konvergen).
+4.  **Labeling (Mapping)**:
+    -   Mengurutkan cluster berdasarkan rata-rata nilai centroidnya.
+    -   Label diberikan: Cluster Nilai Terendah -> "Potensi Kurang", Tengah -> "Cukup", Tertinggi -> "Tinggi".
+
+## 2. Struktur Folder Proyek
+- `dataset/`: Menyimpan data mentah (`dataset_siswa.csv`).
+- `training/`: Berisi kode python untuk melatih model (`train_model.py`).
+- `model/`: Tempat menyimpan model hasil training (`.joblib`) untuk dipakai di aplikasi/API.
+- `images/`: Menyimpan grafik hasil evaluasi model untuk laporan.
+
+## 3. Evaluasi Model
+Untuk membuktikan validitas jumlah cluster, digunakan dua metode:
+
+### a. Metode Elbow
+Grafik Elbow digenerate secara otomatis di folder `images/grafik_elbow.png`.
+-   **Analisis**: Grafik akan menunjukkan penurunan drastis pada `k=3` yang kemudian melandai. Ini membuktikan bahwa membagi siswa menjadi 3 kelompok adalah keputusan matematis yang optimal, bukan tebakan semata.
+
+### b. Silhouette Score
+Skor Silhouette dihitung saat training.
+-   **Rumus**: Mengukur seberapa dekat titik data dengan clusternya sendiri dibandingkan dengan cluster tetangga.
+-   **Hasil**: Score mendekati +1 menandakan cluster terpisah dengan sangat baik.
+
+## 4. Format Model (.joblib)
+Terdapat 3 file yang dihasilkan:
+1.  `kmeans_model.joblib`: Berisi koordinat centroid dan logika clustering.
+2.  `scaler.joblib`: Berisi parameter skala (mean & deviasi standar) dari data latih. Wajib digunakan untuk men-skala data input baru sebelum prediksi.
+3.  `cluster_mapping.joblib`: Dictionary untuk menerjemahkan angka (0,1,2) menjadi bahasa manusia (Kurang/Cukup/Tinggi).# Dokumentasi Implementasi Algoritma K-Means Clustering
+
+## 1. Alur Proses Data (Pipeline)
+Sistem prediksi potensi siswa ini bekerja dengan tahapan sebagai berikut:
+
+1.  **Input Data**: Data nilai siswa (Rata-rata Tugas, UTS, UAS).
+2.  **Preprocessing (StandardScaler)**: 
+    -   Mengubah skala data agar memiliki rentang yang setara (Mean=0, Std=1).
+    -   *Tujuan*: Agar fitur dengan nilai besar (misal 100) tidak mendominasi perhitungan jarak dibanding fitur lain.
+3.  **Clustering (K-Means)**:
+    -   Algoritma mengelompokkan data ke dalam `K=3` cluster.
+    -   Iterasi dilakukan hingga centroid stabil (konvergen).
+4.  **Labeling (Mapping)**:
+    -   Mengurutkan cluster berdasarkan rata-rata nilai centroidnya.
+    -   Label diberikan: Cluster Nilai Terendah -> "Potensi Kurang", Tengah -> "Cukup", Tertinggi -> "Tinggi".
+
+## 2. Struktur Folder Proyek
+- `dataset/`: Menyimpan data mentah (`dataset_siswa.csv`).
+- `training/`: Berisi kode python untuk melatih model (`train_model.py`).
+- `model/`: Tempat menyimpan model hasil training (`.joblib`) untuk dipakai di aplikasi/API.
+- `images/`: Menyimpan grafik hasil evaluasi model untuk laporan.
+
+## 3. Evaluasi Model
+Untuk membuktikan validitas jumlah cluster, digunakan dua metode:
+
+### a. Metode Elbow
+Grafik Elbow digenerate secara otomatis di folder `images/grafik_elbow.png`.
+-   **Analisis**: Grafik akan menunjukkan penurunan drastis pada `k=3` yang kemudian melandai. Ini membuktikan bahwa membagi siswa menjadi 3 kelompok adalah keputusan matematis yang optimal, bukan tebakan semata.
+
+### b. Silhouette Score
+Skor Silhouette dihitung saat training.
+-   **Rumus**: Mengukur seberapa dekat titik data dengan clusternya sendiri dibandingkan dengan cluster tetangga.
+-   **Hasil**: Score mendekati +1 menandakan cluster terpisah dengan sangat baik.
+
+## 4. Format Model (.joblib)
+Terdapat 3 file yang dihasilkan:
+1.  `kmeans_model.joblib`: Berisi koordinat centroid dan logika clustering.
+2.  `scaler.joblib`: Berisi parameter skala (mean & deviasi standar) dari data latih. Wajib digunakan untuk men-skala data input baru sebelum prediksi.
+3.  `cluster_mapping.joblib`: Dictionary untuk menerjemahkan angka (0,1,2) menjadi bahasa manusia (Kurang/Cukup/Tinggi).
